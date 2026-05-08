@@ -15,6 +15,7 @@ export type MintStatus = 'idle' | 'minting' | 'success' | 'error';
 export type MintResult = {
   assetAddress: string;
   explorerUrl: string;
+  mintedCount: number;
 };
 
 export function useMintNft(onSuccess?: () => void) {
@@ -23,7 +24,7 @@ export function useMintNft(onSuccess?: () => void) {
   const [result, setResult] = useState<MintResult | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const mint = useCallback(async () => {
+  const mint = useCallback(async (quantity = 1) => {
     if (!solana.publicKey) return;
 
     setStatus('minting');
@@ -32,25 +33,31 @@ export function useMintNft(onSuccess?: () => void) {
 
     try {
       const umi = createMintUmi(solana);
-      const asset = generateSigner(umi);
+      let lastAssetAddress = '';
 
-      await mintV1(umi, {
-        candyMachine: publicKey(CANDY_MACHINE_ADDRESS),
-        asset,
-        collection:   publicKey(COLLECTION_ADDRESS),
-        mintArgs: {
-          tokenPayment: some({
-            mint:           publicKey(USDC_MINT),
-            destinationAta: publicKey(TREASURY_ATA),
-          }),
-          mintLimit: some({ id: 1 }),
-        },
-      }).sendAndConfirm(umi);
+      for (let index = 0; index < quantity; index += 1) {
+        const asset = generateSigner(umi);
 
-      const assetAddress = asset.publicKey;
+        await mintV1(umi, {
+          candyMachine: publicKey(CANDY_MACHINE_ADDRESS),
+          asset,
+          collection:   publicKey(COLLECTION_ADDRESS),
+          mintArgs: {
+            tokenPayment: some({
+              mint:           publicKey(USDC_MINT),
+              destinationAta: publicKey(TREASURY_ATA),
+            }),
+            mintLimit: some({ id: 1 }),
+          },
+        }).sendAndConfirm(umi);
+
+        lastAssetAddress = asset.publicKey;
+      }
+
       setResult({
-        assetAddress,
-        explorerUrl: `https://core.metaplex.com/explorer/${assetAddress}?env=devnet`,
+        assetAddress: lastAssetAddress,
+        explorerUrl: `https://core.metaplex.com/explorer/${lastAssetAddress}?env=devnet`,
+        mintedCount: quantity,
       });
       setStatus('success');
       onSuccess?.();
