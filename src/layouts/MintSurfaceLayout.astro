@@ -1,0 +1,133 @@
+---
+interface Props {
+  title?: string;
+  description?: string;
+  breadcrumbLabel?: string;
+}
+
+const {
+  title = "Ponzilio :: /mint",
+  description = "Mint Toxic Ponzilio Boyfriends NFTs on Solana.",
+  breadcrumbLabel = "ponzilio/mint",
+} = Astro.props;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&family=VT323&display=swap"
+      rel="stylesheet"
+    />
+    <script>
+      import { Buffer } from "buffer";
+      import process from "process";
+
+      window.Buffer = Buffer;
+      window.process = process;
+      globalThis.Buffer = Buffer;
+      globalThis.process = process;
+    </script>
+  </head>
+
+  <body data-screen-label="/mint subpage">
+    <div class="topbar">
+      <div class="breadcrumb">
+        C:/<a href="/">{breadcrumbLabel}</a>
+      </div>
+      <div class="right">
+        <a href="/">← Home</a>
+        <a href="#mint-connect">Connect wallet</a>
+      </div>
+    </div>
+
+    <slot />
+  </body>
+</html>
+
+<style>
+  :root {
+    --paper: #f6f4ef;
+    --ink: #000;
+    --link: #0033a0;
+    --link-visited: #5a2e8b;
+    --pz-blue: #0a2a6b;
+  }
+
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 13px;
+    line-height: 1.45;
+    background-image:
+      linear-gradient(180deg, rgba(184, 200, 232, 0.25) 0, transparent 220px),
+      repeating-linear-gradient(0deg, transparent 0 39px, rgba(0, 0, 0, 0.025) 39px 40px);
+    min-height: 100vh;
+  }
+
+  a {
+    color: var(--link);
+    text-decoration: underline;
+  }
+
+  a:visited {
+    color: var(--link-visited);
+  }
+
+  a:hover {
+    text-decoration: none;
+    background: #ffe96b;
+  }
+
+  .topbar {
+    background: linear-gradient(180deg, #fff, #cdd9ee 60%, #a8baddff);
+    border-bottom: 2px solid var(--pz-blue);
+    padding: 8px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+  }
+
+  .breadcrumb {
+    font-family: "VT323", monospace;
+    font-size: 16px;
+    color: var(--pz-blue);
+    font-weight: bold;
+  }
+
+  .breadcrumb a {
+    color: var(--pz-blue);
+  }
+
+  .right {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+  }
+
+  .right a {
+    font-weight: bold;
+  }
+
+  @media (max-width: 520px) {
+    .right {
+      display: none;
+    }
+  }
+</style>

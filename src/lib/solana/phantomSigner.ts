@@ -3,9 +3,9 @@ import {
   toWeb3JsTransaction,
   fromWeb3JsTransaction,
 } from '@metaplex-foundation/umi-web3js-adapters';
-import { VersionedTransaction } from '@solana/web3.js';
 import type { Signer } from '@metaplex-foundation/umi';
 import type { ISolanaChain } from '@phantom/chain-interfaces';
+import type { VersionedTransaction } from '@solana/web3.js';
 
 export function createSignerFromPhantom(solana: ISolanaChain): Signer {
   return {
