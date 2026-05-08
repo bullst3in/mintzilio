@@ -45,11 +45,24 @@ const {
       </div>
       <div class="right">
         <a href="/">← Home</a>
-        <a href="#mint-connect">Connect wallet</a>
+        <a href="#mint-connect" id="topbar-connect-link">Connect wallet</a>
       </div>
     </div>
 
     <slot />
+
+    <script>
+      const topbarConnectLink = document.getElementById("topbar-connect-link");
+
+      topbarConnectLink?.addEventListener("click", (event) => {
+        const mintConnectButton = document.getElementById("mint-connect");
+
+        if (mintConnectButton instanceof HTMLButtonElement) {
+          event.preventDefault();
+          mintConnectButton.click();
+        }
+      });
+    </script>
   </body>
 </html>
 
